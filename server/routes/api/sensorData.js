@@ -3,7 +3,7 @@ const router = express.Router()
 
 // const SensorData = require('../../models/SensorData')
 
-const MOCK_SENSOR_DATA = require('../../MOCK_SENSOR_DATA')
+const MOCK_SENSOR_DATA = require('../../../MOCK_SENSOR_DATA')
 
 // @route   GET api/sensorData
 // @desc    Get sensor data from database
