@@ -54,9 +54,6 @@ typings/
 # dotenv environment variables file
 .env
 
-# gatsby files
-.cache/
-public
 
 # Mac files
 .DS_Store
@@ -74,3 +71,10 @@ yarn-error.log
 
 # Compiled lambda functions
 lambda/build
+
+# Client
+client/build
+client/node_modules
+client/npm-debug.log*
+client/yarn-debug.log*
+client/yarn-error.log*
