@@ -9,6 +9,7 @@
     "server": "nodemon server.js",
     "client": "npm start --prefix client",
     "client-install": "npm install --prefix client",
+    "analyze": "SKIP_PREFLIGHT_CHECK=true npm run build --prefix client && source-map-explorer 'client/build/static/js/*.js'",
     "lint": "eslint server client server.js",
     "prettier": "prettier \"**/*.+(js|jsx|json|yml|yaml|html|css|less|scss|ts|tsx|md|mdx|graphql|vue|py|java|php)\"",
     "format": "npm run prettier -- --write",
@@ -45,6 +46,7 @@
     "jest-config": "^24.3.0",
     "lint-staged": "^8.1.5",
     "nodemon": "^1.18.10",
-    "prettier": "^1.16.4"
+    "prettier": "^1.16.4",
+    "source-map-explorer": "^1.7.0"
   }
 }
