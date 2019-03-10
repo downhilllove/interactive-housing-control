@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react'
 import { Table } from 'reactstrap'
+import moment from 'moment'
 
 import getSensorData from '../apis/getSensorData'
 
@@ -35,9 +36,10 @@ const SensorData = () => {
         <tbody>
           {sensorData.map(
             ({ _id, date, temperatureCelsius, humidityPercentage }) => {
+              const formattedDate = moment(date).format('HH:MM:ss')
               return (
                 <tr key={_id}>
-                  <td>{date}</td>
+                  <td>{formattedDate}</td>
                   <td>{temperatureCelsius} °C</td>
                   <td>{humidityPercentage} %</td>
                 </tr>

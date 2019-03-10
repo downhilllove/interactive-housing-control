@@ -17,6 +17,10 @@ const routes = [
     to: '/',
   },
   {
+    title: 'Übersicht',
+    to: '/uebersicht',
+  },
+  {
     title: 'Über Uns',
     to: '/ueber-uns',
   },

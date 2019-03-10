@@ -5,9 +5,13 @@ import './styles/global.scss'
 import App from './App'
 import * as serviceWorker from './serviceWorker'
 
+import { SensorDataContextProvider } from './context/SensorDataContext'
+
 ReactDOM.render(
   <BrowserRouter>
-    <App />
+    <SensorDataContextProvider>
+      <App />
+    </SensorDataContextProvider>
   </BrowserRouter>,
   document.getElementById('root'),
 )
