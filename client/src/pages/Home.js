@@ -14,10 +14,10 @@ const Home = () => {
     sensorData: { data: sensorData },
   } = useContext(SensorDataContext)
 
-  const latest10SensorDataMeasurements = [...sensorData].splice(
-    0,
-    numberOfLatestMeasurementsToDisplay,
-  )
+  const latest10SensorDataMeasurements = [...sensorData]
+    .reverse()
+    .splice(0, numberOfLatestMeasurementsToDisplay)
+
   return (
     <Container>
       <div className={styles.distance}>

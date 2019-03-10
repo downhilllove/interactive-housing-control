@@ -1,6 +1,6 @@
 const getSensorData = async () => {
   try {
-    const response = await fetch('/api/sensorData')
+    const response = await fetch('/api/getAllSensorMeasurements')
     const sensorData = await response.json()
 
     if (!sensorData) console.error('Failed to fetch sensor data from server')

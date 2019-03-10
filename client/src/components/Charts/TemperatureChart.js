@@ -20,7 +20,7 @@ const TemperatureChart = ({ temperatures, labels, unit = 'celsius' }) => {
   const series = [
     {
       name: 'Temperatur',
-      data: temperatures,
+      data: temperatures.map(temperature => Math.round(temperature)),
     },
   ]
 

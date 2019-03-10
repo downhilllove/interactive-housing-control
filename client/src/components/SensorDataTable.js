@@ -3,10 +3,12 @@ import PropTypes from 'prop-types'
 import { Table } from 'reactstrap'
 import moment from 'moment'
 
+import { formatNumberWithMaxFractionDigits } from '../utils/formatNumber'
+
 const SensorDataTable = ({
   title = '',
   sensorData = [],
-  dateFormatter = 'DD.MM.YYYY HH:MM:ss',
+  dateFormatter = 'DD.MM.YYYY HH:mm:ss',
 }) => {
   return (
     <div>
@@ -24,10 +26,15 @@ const SensorDataTable = ({
             ({ _id, date, temperatureCelsius, humidityPercentage }) => {
               const formattedDate = moment(date).format(dateFormatter)
               return (
-                <tr key={_id}>
+                <tr key={_id || formattedDate}>
                   <td>{formattedDate}</td>
-                  <td>{temperatureCelsius} °C</td>
-                  <td>{humidityPercentage} %</td>
+                  <td>
+                    {formatNumberWithMaxFractionDigits(temperatureCelsius, 2)}{' '}
+                    °C
+                  </td>
+                  <td>
+                    {formatNumberWithMaxFractionDigits(humidityPercentage, 2)} %
+                  </td>
                 </tr>
               )
             },

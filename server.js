@@ -6,7 +6,10 @@ const path = require('path')
 
 const isProduction = require('./server/utils/isProduction')
 
-const sensorDataRoute = require('./server/routes/api/sensorData')
+// Import routes
+const getAllSensorMeasurementsRoute = require('./server/routes/api/getAllSensorMeasurements')
+const createFakeSensorMeasurementsRoute = require('./server/routes/api/createFakeSensorMeasurements')
+const deleteAllMeasurementsRoute = require('./server/routes/api/deleteAllMeasurements')
 
 const port = process.env.PORT || 5000
 const app = express()
@@ -21,7 +24,9 @@ mongoose
   .catch(err => console.error(err))
 
 // API routes
-app.use('/api/sensorData', sensorDataRoute)
+app.use('/api/getAllSensorMeasurements', getAllSensorMeasurementsRoute)
+app.use('/api/createFakeSensorMeasurements', createFakeSensorMeasurementsRoute)
+app.use('/api/deleteAllMeasurements', deleteAllMeasurementsRoute)
 
 // Send React entry point for every route except for apis
 if (isProduction()) {

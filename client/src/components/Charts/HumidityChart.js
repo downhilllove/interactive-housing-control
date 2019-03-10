@@ -30,7 +30,7 @@ const HumidityChart = ({ humidities, labels }) => {
   const series = [
     {
       name: 'Luftfeuchtigkeit',
-      data: humidities,
+      data: humidities.map(humidity => Math.round(humidity)),
     },
   ]
 
