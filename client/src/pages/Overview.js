@@ -3,7 +3,6 @@ import { Container } from 'reactstrap'
 import moment from 'moment'
 
 import MonthOverview from '../components/MonthOverview'
-
 import SensorDataContext from '../context/SensorDataContext'
 
 const getAvailableMonths = sensorData => {
@@ -23,7 +22,9 @@ const Overview = () => {
 
   return (
     <Container>
+      <br />
       <h1>Übersicht</h1>
+      <br />
       {availableMonths.length > 0 && (
         <MonthOverview
           availableMonths={availableMonths}

@@ -5,6 +5,8 @@ import SensorDataTable from '../components/SensorDataTable'
 
 import SensorDataContext from '../context/SensorDataContext'
 
+import styles from './Home.module.scss'
+
 const numberOfLatestMeasurementsToDisplay = 10
 
 const Home = () => {
@@ -18,11 +20,14 @@ const Home = () => {
   )
   return (
     <Container>
-      <h1>Home</h1>
-      <SensorDataTable
-        title={`Letzte ${numberOfLatestMeasurementsToDisplay} Messungen`}
-        sensorData={latest10SensorDataMeasurements}
-      />
+      <div className={styles.distance}>
+        <h1>Home</h1>
+        <br />
+        <SensorDataTable
+          title={`Letzte ${numberOfLatestMeasurementsToDisplay} Messungen`}
+          sensorData={latest10SensorDataMeasurements}
+        />
+      </div>
     </Container>
   )
 }
