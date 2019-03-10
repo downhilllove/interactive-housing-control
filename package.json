@@ -9,6 +9,7 @@
     "server": "nodemon server.js",
     "client": "npm start --prefix client",
     "client-install": "npm install --prefix client",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm run client-install && npm run build --prefix client",
     "analyze": "SKIP_PREFLIGHT_CHECK=true npm run build --prefix client && source-map-explorer 'client/build/static/js/*.js'",
     "lint": "eslint server client server.js",
     "prettier": "prettier \"**/*.+(js|jsx|json|yml|yaml|html|css|less|scss|ts|tsx|md|mdx|graphql|vue|py|java|php)\"",
