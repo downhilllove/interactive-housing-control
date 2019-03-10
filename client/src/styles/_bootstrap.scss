@@ -1,0 +1,13 @@
+@import '~bootstrap/scss/bootstrap'; // TODO: Remove this line and only import needed modules
+
+// Required
+@import '~bootstrap/scss/functions';
+@import '~bootstrap/scss/variables';
+@import '~bootstrap/scss/mixins';
+
+// Reboot
+@import '~bootstrap/scss/bootstrap-reboot';
+
+// Optional~
+@import '~bootstrap/scss/root';
+@import '~bootstrap/scss/bootstrap-grid';
