@@ -1,30 +1,16 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useEffect } from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import { Table } from 'reactstrap'
 import moment from 'moment'
 
-import getSensorData from '../apis/getSensorData'
-
-const SensorData = () => {
-  const [sensorData, setSensorData] = useState(null)
-
-  const fetchSensorData = async () => {
-    try {
-      const data = await getSensorData()
-      setSensorData(data)
-    } catch (err) {
-      console.error(err)
-    }
-  }
-
-  useEffect(() => {
-    fetchSensorData()
-  }, [])
-
-  if (!sensorData) return null
-
+const SensorDataTable = ({
+  title = '',
+  sensorData = [],
+  dateFormatter = 'DD.MM.YYYY HH:MM:ss',
+}) => {
   return (
     <div>
+      <h3>{title}</h3>
       <Table>
         <thead>
           <tr>
@@ -36,7 +22,7 @@ const SensorData = () => {
         <tbody>
           {sensorData.map(
             ({ _id, date, temperatureCelsius, humidityPercentage }) => {
-              const formattedDate = moment(date).format('HH:MM:ss')
+              const formattedDate = moment(date).format(dateFormatter)
               return (
                 <tr key={_id}>
                   <td>{formattedDate}</td>
@@ -52,4 +38,10 @@ const SensorData = () => {
   )
 }
 
-export default SensorData
+SensorDataTable.propTypes = {
+  title: PropTypes.string.isRequired,
+  sensorData: PropTypes.arrayOf(PropTypes.object.isRequired).isRequired,
+  dateFormatter: PropTypes.string,
+}
+
+export default SensorDataTable

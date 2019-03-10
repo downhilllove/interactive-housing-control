@@ -11,17 +11,17 @@ const getOptions = labels => ({
   stroke: {
     curve: 'smooth',
   },
+  yaxis: {
+    min: 0,
+    max: 100,
+  },
   xaxis: {
     categories: labels,
   },
-
   theme: {
-    palette: 'palette5',
     monochrome: {
       enabled: true,
       color: '00E396',
-      shadeTo: 'light',
-      shadeIntensity: 0.65,
     },
   },
 })

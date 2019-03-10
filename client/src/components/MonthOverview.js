@@ -4,11 +4,20 @@ import { Input } from 'reactstrap'
 import moment from 'moment'
 import TemperatureChart from './Charts/TemperatureChart'
 import HumidityChart from './Charts/HumidityChart'
+import SensorDataTable from './SensorDataTable'
 
 import useInputValue from '../hooks/useInputValue'
 
+const getSelectedYearAndMonth = yearMonthInputValue => {
+  const [selectedYear, selectedMonth] = yearMonthInputValue.value.split('-')
+  return {
+    selectedYear: selectedYear,
+    selectedMonth: selectedMonth,
+  }
+}
+
 const getSensorDataForSelectedYearMonth = (sensorData, yearMonth) => {
-  const [selectedYear, selectedMonth] = yearMonth.split('-')
+  const { selectedYear, selectedMonth } = getSelectedYearAndMonth(yearMonth)
   return sensorData.filter(({ date }) => {
     const year = moment(date).format('YYYY')
     const month = moment(date).format('MM')
@@ -58,10 +67,17 @@ const aggregateSensorDataByDay = sensorDataForMonth => {
 
 const MonthOverview = ({ availableMonths = [], sensorData = [] }) => {
   const selectedYearMonth = useInputValue(availableMonths[0])
+  const { selectedYear, selectedMonth } = getSelectedYearAndMonth(
+    selectedYearMonth,
+  )
+
+  const monthName = new Date(0, selectedMonth - 1).toLocaleString('de-AT', {
+    month: 'long',
+  })
 
   const sensorDataForSelectedYearMonth = getSensorDataForSelectedYearMonth(
     sensorData,
-    selectedYearMonth.value,
+    selectedYearMonth,
   )
 
   const sensorDataByDay = aggregateSensorDataByDay(
@@ -77,15 +93,29 @@ const MonthOverview = ({ availableMonths = [], sensorData = [] }) => {
   const averageHumidities = sensorDataByDay.map(
     ({ averageHumidity }) => averageHumidity,
   )
+  const tableData = sensorDataByDay.map(
+    ({ dateOfMonth, averageTemperature, averageHumidity }) => {
+      const date = new Date(selectedYear, selectedMonth - 1, dateOfMonth)
+      return {
+        date,
+        temperatureCelsius: averageTemperature,
+        humidityPercentage: averageHumidity,
+      }
+    },
+  )
 
   return (
     <div>
-      <h2>Monatsübersicht</h2>
+      <h2>
+        Monatsübersicht für {monthName} {selectedYear}
+      </h2>
+
       <Input type="select" name="selectedMonth" {...selectedYearMonth}>
         {availableMonths.map(month => (
           <option key={month}>{month}</option>
         ))}
       </Input>
+
       <TemperatureChart
         temperatures={averageTemperatures}
         labels={availableDatesOfSelectedMonth}
@@ -93,6 +123,11 @@ const MonthOverview = ({ availableMonths = [], sensorData = [] }) => {
       <HumidityChart
         humidities={averageHumidities}
         labels={availableDatesOfSelectedMonth}
+      />
+      <SensorDataTable
+        title={`Durchschnittswerte für ${monthName} ${selectedYear}`}
+        sensorData={tableData}
+        dateFormatter="DD.MM.YYYY"
       />
     </div>
   )

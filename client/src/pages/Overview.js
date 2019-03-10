@@ -1,7 +1,8 @@
 import React, { useContext } from 'react'
 import { Container } from 'reactstrap'
-import MonthOverview from '../components/MonthOverview'
 import moment from 'moment'
+
+import MonthOverview from '../components/MonthOverview'
 
 import SensorDataContext from '../context/SensorDataContext'
 
