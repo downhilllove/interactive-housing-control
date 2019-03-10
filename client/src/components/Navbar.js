@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import {
+  Container,
   Collapse,
   Navbar,
   NavbarToggler,
@@ -40,8 +41,8 @@ const Navigation = () => {
   const toggleNav = () => setIsOpen(!isOpen)
 
   return (
-    <div>
-      <Navbar color="light" light expand="md">
+    <Navbar color="light" light expand="md">
+      <Container>
         <NavbarBrand href="/">reactstrap</NavbarBrand>
         <NavbarToggler onClick={toggleNav} />
         <Collapse isOpen={isOpen} navbar>
@@ -51,8 +52,8 @@ const Navigation = () => {
             ))}
           </Nav>
         </Collapse>
-      </Navbar>
-    </div>
+      </Container>
+    </Navbar>
   )
 }
 
