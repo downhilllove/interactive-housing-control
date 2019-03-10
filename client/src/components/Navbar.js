@@ -5,11 +5,11 @@ import {
   Collapse,
   Navbar,
   NavbarToggler,
-  NavbarBrand,
   Nav,
   NavItem,
 } from 'reactstrap'
 import { Link } from 'react-router-dom'
+import { ReactComponent as Logo } from '../svg/logo.svg'
 
 const routes = [
   {
@@ -47,7 +47,9 @@ const Navigation = () => {
   return (
     <Navbar color="light" light expand="md">
       <Container>
-        <NavbarBrand href="/">reactstrap</NavbarBrand>
+        <Link to="/" className="navbar-brand">
+          <Logo style={{ height: '35px' }} />
+        </Link>
         <NavbarToggler onClick={toggleNav} />
         <Collapse isOpen={isOpen} navbar>
           <Nav className="ml-auto" navbar>
