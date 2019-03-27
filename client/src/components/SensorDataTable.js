@@ -23,10 +23,10 @@ const SensorDataTable = ({
         </thead>
         <tbody>
           {sensorData.map(
-            ({ _id, date, temperatureCelsius, humidityPercentage }) => {
+            ({ id, date, temperatureCelsius, humidityPercentage }) => {
               const formattedDate = moment(date).format(dateFormatter)
               return (
-                <tr key={_id || formattedDate}>
+                <tr key={id || formattedDate}>
                   <td>{formattedDate}</td>
                   <td>
                     {formatNumberWithMaxFractionDigits(temperatureCelsius, 2)}{' '}

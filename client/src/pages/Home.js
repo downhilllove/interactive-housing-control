@@ -1,22 +1,22 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import { Container } from 'reactstrap'
 
 import SensorDataTable from '../components/SensorDataTable'
-
-import SensorDataContext from '../context/SensorDataContext'
+import useAxios from '../hooks/useAxios'
 
 import styles from './Home.module.scss'
 
 const numberOfLatestMeasurementsToDisplay = 10
+const getLatest10Measurements = (measurements = []) =>
+  [...measurements].reverse().splice(0, numberOfLatestMeasurementsToDisplay)
 
 const Home = () => {
-  const {
-    sensorData: { data: sensorData },
-  } = useContext(SensorDataContext)
+  const { data, isLoading, isError } = useAxios('/api/mariaDB/allMeasurements')
 
-  const latest10SensorDataMeasurements = [...sensorData]
-    .reverse()
-    .splice(0, numberOfLatestMeasurementsToDisplay)
+  if (isLoading) return <h2>Daten werden geladen...</h2>
+  if (isError) return <h2>Ein Fehler ist aufgetreten!</h2>
+
+  const latest10SensorDataMeasurements = getLatest10Measurements(data || [])
 
   return (
     <Container>
