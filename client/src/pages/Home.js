@@ -1,7 +1,9 @@
 import React from 'react'
 import { Container } from 'reactstrap'
 
+import LoadingAnimation from '../components/LoadingAnimation'
 import SensorDataTable from '../components/SensorDataTable'
+
 import useAxios from '../hooks/useAxios'
 
 import styles from './Home.module.scss'
@@ -13,7 +15,7 @@ const getLatest10Measurements = (measurements = []) =>
 const Home = () => {
   const { data, isLoading, isError } = useAxios('/api/mariaDB/allMeasurements')
 
-  if (isLoading) return <h2>Daten werden geladen...</h2>
+  if (isLoading) return <LoadingAnimation />
   if (isError) return <h2>Ein Fehler ist aufgetreten!</h2>
 
   const latest10SensorDataMeasurements = getLatest10Measurements(data || [])

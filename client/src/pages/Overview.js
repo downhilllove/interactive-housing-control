@@ -2,6 +2,7 @@ import React from 'react'
 import { Container } from 'reactstrap'
 import moment from 'moment'
 
+import LoadingAnimation from '../components/LoadingAnimation'
 import MonthOverview from '../components/MonthOverview'
 
 import useAxios from '../hooks/useAxios'
@@ -18,7 +19,7 @@ const getAvailableMonths = sensorData => {
 const Overview = () => {
   const { data, isLoading, isError } = useAxios('/api/mariaDB/allMeasurements')
 
-  if (isLoading) return <h2>Daten werden geladen...</h2>
+  if (isLoading) return <LoadingAnimation />
   if (isError) return <h2>Ein Fehler ist aufgetreten!</h2>
   const availableMonths = getAvailableMonths(data || [])
 
