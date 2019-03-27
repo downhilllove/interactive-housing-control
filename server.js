@@ -1,15 +1,12 @@
 require('dotenv').config()
 const express = require('express')
-const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
 const path = require('path')
 
 const isProduction = require('./server/utils/isProduction')
 
 // Import routes
-const getAllSensorMeasurementsRoute = require('./server/routes/api/getAllSensorMeasurements')
-const createFakeSensorMeasurementsRoute = require('./server/routes/api/createFakeSensorMeasurements')
-const deleteAllMeasurementsRoute = require('./server/routes/api/deleteAllMeasurements')
+const mariaDBRoute = require('./server/routes/api/mariaDB')
 
 const port = process.env.PORT || 5000
 const app = express()
@@ -17,16 +14,8 @@ const app = express()
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 
-// Connect to database
-mongoose
-  .connect(process.env.MONGOURI, { useNewUrlParser: true })
-  .then(() => console.info('MongoDB connection successfully established'))
-  .catch(err => console.error(err))
-
 // API routes
-app.use('/api/getAllSensorMeasurements', getAllSensorMeasurementsRoute)
-app.use('/api/createFakeSensorMeasurements', createFakeSensorMeasurementsRoute)
-app.use('/api/deleteAllMeasurements', deleteAllMeasurementsRoute)
+app.use('/api/mariaDB', mariaDBRoute)
 
 // Send React entry point for every route except for apis
 if (isProduction()) {
