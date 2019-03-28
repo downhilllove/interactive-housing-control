@@ -21,20 +21,17 @@ CREATE TABLE ${tableName} (
     date DATETIME,
     temperatureCelsius FLOAT,
     humidityPercentage FLOAT
-)
+);
 `
 
 // @route   GET api/mariaDB/allMeasurements
 // @desc    Get alls measurements from database
 // @access  Public
 router.get('/allMeasurements', async (req, res) => {
-  const getAllMeasurementsQuery = `
-    SELECT * FROM ${tableName};
-    `
   try {
     const dbConnection = await getMariaDBConnection()
     await dbConnection.query(`USE ${database};`)
-    const measurements = await dbConnection.query(getAllMeasurementsQuery)
+    const measurements = await dbConnection.query(`SELECT * FROM ${tableName};`)
     res.json(measurements)
   } catch (error) {
     console.error(error)
@@ -48,7 +45,7 @@ router.get('/allMeasurements', async (req, res) => {
 router.get('/resetDB', async (req, res) => {
   try {
     const dbConnection = await getMariaDBConnection()
-    //await dbConnection.query(`CREATE OR REPLACE DATABASE ${database};`) // Reset the database
+    await dbConnection.query(`CREATE OR REPLACE DATABASE ${database};`) // Reset the database
     console.info(`Dropped and created database ${database}`)
     await dbConnection.query(`USE ${database};`)
     console.info(`Reselected database ${database}`)
@@ -69,7 +66,7 @@ router.get('/fillWithFakeMeasurements', async (req, res) => {
   const fakeMeasurements = createFakeMeasurements()
 
   const batchQuery = {
-    sql: `INSERT INTO ${tableName} (date, temperatureCelsius, humidityPercentage) VALUES (?, ?, ?)`,
+    sql: `INSERT INTO ${tableName} (date, temperatureCelsius, humidityPercentage) VALUES (?, ?, ?);`,
     values: fakeMeasurements.map(
       ({ date, temperatureCelsius, humidityPercentage }) => [
         formatDateTimeForMariaDB(date),
