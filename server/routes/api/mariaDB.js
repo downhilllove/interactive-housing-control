@@ -38,6 +38,29 @@ router.get('/allMeasurements', async (req, res) => {
     res.status(500).json({ error })
   }
 })
+// @route   GET api/mariaDB/latestMeasurements
+// @desc    Get latest n measurements
+// @access  Public
+router.get('/latestMeasurements', async (req, res) => {
+  const numberOfMeasurements = req.query.count || 10
+
+  const query = `
+  SELECT *
+  FROM Measurements
+  ORDER BY date DESC
+  LIMIT ${numberOfMeasurements}
+  `
+
+  try {
+    const dbConnection = await getMariaDBConnection()
+    await dbConnection.query(`USE ${database};`)
+    const measurements = await dbConnection.query(query)
+    res.json(measurements)
+  } catch (error) {
+    console.error(error)
+    res.status(500).json({ error })
+  }
+})
 
 // @route   GET api/mariaDB/averageMeasurementsPerDay
 // @desc    Get average measurements grouped by day
