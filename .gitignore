@@ -68,6 +68,7 @@ yarn-error.log
 
 # IDE
 .idea
+.vscode
 
 # Compiled lambda functions
 lambda/build
