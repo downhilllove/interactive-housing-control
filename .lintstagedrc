@@ -3,7 +3,7 @@
         "*.js": [
             "eslint"
         ],
-        "**/*.+(js|jsx|json|yml|yaml|html|css|less|scss|ts|tsx|md|mdx|graphql|vue|py|java|php)": [
+        "**/*.+(js|jsx|json|yml|yaml|html|css|less|scss|ts|tsx|md|mdx|graphql|vue|java|php)": [
             "prettier --write",
             "git add"
         ]
