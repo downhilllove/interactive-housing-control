@@ -25,7 +25,7 @@ CREATE TABLE ${tableName} (
 `
 
 // @route   GET api/mariaDB/allMeasurements
-// @desc    Get alls measurements from database
+// @desc    Get all measurements
 // @access  Public
 router.get('/allMeasurements', async (req, res) => {
   try {
@@ -39,8 +39,33 @@ router.get('/allMeasurements', async (req, res) => {
   }
 })
 
+// @route   GET api/mariaDB/averageMeasurementsPerDay
+// @desc    Get average measurements grouped by day
+// @access  Public
+router.get('/averageMeasurementsPerDay', async (req, res) => {
+  const query = `
+  SELECT
+    id,
+    DATE(date) AS date,
+    AVG(temperatureCelsius) AS averageTemperatureCelsius,
+    AVG(humidityPercentage) AS averageHumidityPercentage
+  FROM ${tableName}
+  GROUP BY DATE(date)
+  `
+
+  try {
+    const dbConnection = await getMariaDBConnection()
+    await dbConnection.query(`USE ${database};`)
+    const measurements = await dbConnection.query(query)
+    res.json(measurements)
+  } catch (error) {
+    console.error(error)
+    res.status(500).json({ error })
+  }
+})
+
 // @route   GET api/mariaDB/resetDB
-// @desc    Get sensor data from database
+// @desc    Drop and recreate db and Measurements table
 // @access  Public
 router.get('/resetDB', async (req, res) => {
   try {
