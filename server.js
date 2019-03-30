@@ -2,7 +2,9 @@ require('dotenv').config()
 const express = require('express')
 const bodyParser = require('body-parser')
 const path = require('path')
+const compression = require('compression')
 
+// Import utils
 const isProduction = require('./server/utils/isProduction')
 
 // Import routes
@@ -11,8 +13,10 @@ const mariaDBRoute = require('./server/routes/api/mariaDB')
 const port = process.env.PORT || 5000
 const app = express()
 
+// Middlewares
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
+app.use(compression())
 
 // API routes
 app.use('/api/mariaDB', mariaDBRoute)
