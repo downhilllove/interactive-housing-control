@@ -44,10 +44,13 @@ Install MariadDB Server on your Raspberry Pi:
 $ sudo apt-get install mariadb-server
 ```
 
-Create a database user
+Create a database and database user
 
 ```
-$ mysql -u ih -p
+$ sudo mysql
+$ CREATE DATABASE interactive_housing_control;
+$ CREATE USER 'pi' identified by 'pi';
+$ GRANT ALL PRIVILEGES ON *.* TO 'pi'@localhost identified by 'pi';
 ```
 
 ## Step 5 - Python
