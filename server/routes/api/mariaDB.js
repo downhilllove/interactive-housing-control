@@ -4,25 +4,11 @@ const moment = require('moment')
 const createFakeMeasurements = require('../../utils/createFakeMeasurements')
 
 const getMariaDBConnection = require('../../utils/getMariaDBConnection')
-const database = process.env.DB_DATABASE || 'interactiveHousingControl'
+const database = process.env.DB_DATABASE
 const tableName = 'Measurements'
-
-/*const getInsertQuery = ({ date, temperatureCelsius, humidityPercentage }) =>
-`INSERT INTO ${tableName} (date, temperatureCelsius, humidityPercentage) VALUES ("${formatDateTimeForMariaDB(
-  date,
-)}", ${temperatureCelsius}, ${humidityPercentage});`*/
 
 const formatDateTimeForMariaDB = date =>
   moment(date).format('YYYY-MM-DD HH:mm:ss')
-
-const createTableQuery = `
-CREATE TABLE ${tableName} (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    date DATETIME,
-    temperatureCelsius FLOAT,
-    humidityPercentage FLOAT
-);
-`
 
 // @route   GET api/mariaDB/allMeasurements
 // @desc    Get all measurements
@@ -91,6 +77,15 @@ router.get('/averageMeasurementsPerDay', async (req, res) => {
 // @desc    Drop and recreate db and Measurements table
 // @access  Public
 router.get('/resetDB', async (req, res) => {
+  const createTableQuery = `
+  CREATE TABLE ${tableName} (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    date DATETIME,
+    temperatureCelsius FLOAT,
+    humidityPercentage FLOAT
+  );
+`
+
   try {
     const dbConnection = await getMariaDBConnection()
     await dbConnection.query(`CREATE OR REPLACE DATABASE ${database};`) // Reset the database
