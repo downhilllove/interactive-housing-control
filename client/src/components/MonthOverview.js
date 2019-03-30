@@ -26,45 +26,6 @@ const getSensorDataForSelectedYearMonth = (sensorData, yearMonth) => {
   })
 }
 
-const aggregateSensorDataByDay = sensorDataForMonth => {
-  const datesOfMonth = sensorDataForMonth.map(({ date }) => moment(date).date())
-  const uniqueDatesOfMonth = [...new Set(datesOfMonth)]
-
-  return uniqueDatesOfMonth.reduce((aggregatedSensorDataByDay, dateOfMonth) => {
-    const sensorDataForDay = sensorDataForMonth.filter(
-      ({ date }) => moment(date).date() === dateOfMonth,
-    )
-
-    const temperatures = sensorDataForDay.map(
-      ({ temperatureCelsius }) => temperatureCelsius,
-    )
-    const humidities = sensorDataForDay.map(
-      ({ humidityPercentage }) => humidityPercentage,
-    )
-
-    const aggregatedTemperatures = temperatures.reduce(
-      (aggregatedTemperature, temperature) =>
-        aggregatedTemperature + temperature,
-    )
-
-    const aggregatedHumidities = humidities.reduce(
-      (aggregatedHumidity, humidity) => aggregatedHumidity + humidity,
-    )
-
-    const averageTemperature = aggregatedTemperatures / temperatures.length
-    const averageHumidity = aggregatedHumidities / temperatures.length
-
-    return [
-      ...aggregatedSensorDataByDay,
-      {
-        dateOfMonth,
-        averageTemperature,
-        averageHumidity,
-      },
-    ]
-  }, [])
-}
-
 const MonthOverview = ({ availableMonths = [], sensorData = [] }) => {
   const selectedYearMonth = useInputValue(availableMonths[0])
   const { selectedYear, selectedMonth } = getSelectedYearAndMonth(
@@ -80,26 +41,21 @@ const MonthOverview = ({ availableMonths = [], sensorData = [] }) => {
     selectedYearMonth,
   )
 
-  const sensorDataByDay = aggregateSensorDataByDay(
-    sensorDataForSelectedYearMonth,
+  const availableDatesOfSelectedMonth = sensorDataForSelectedYearMonth.map(
+    ({ date }) => moment(date).date(),
   )
-
-  const availableDatesOfSelectedMonth = sensorDataByDay.map(
-    ({ dateOfMonth }) => dateOfMonth,
+  const averageTemperatures = sensorDataForSelectedYearMonth.map(
+    ({ averageTemperatureCelsius }) => averageTemperatureCelsius,
   )
-  const averageTemperatures = sensorDataByDay.map(
-    ({ averageTemperature }) => averageTemperature,
+  const averageHumidities = sensorDataForSelectedYearMonth.map(
+    ({ averageHumidityPercentage }) => averageHumidityPercentage,
   )
-  const averageHumidities = sensorDataByDay.map(
-    ({ averageHumidity }) => averageHumidity,
-  )
-  const tableData = sensorDataByDay.map(
-    ({ dateOfMonth, averageTemperature, averageHumidity }) => {
-      const date = new Date(selectedYear, selectedMonth - 1, dateOfMonth)
+  const tableData = sensorDataForSelectedYearMonth.map(
+    ({ date, averageTemperatureCelsius, averageHumidityPercentage }) => {
       return {
-        date,
-        temperatureCelsius: averageTemperature,
-        humidityPercentage: averageHumidity,
+        date: new Date(selectedYear, selectedMonth - 1, moment(date).date()),
+        temperatureCelsius: averageTemperatureCelsius,
+        humidityPercentage: averageHumidityPercentage,
       }
     },
   )

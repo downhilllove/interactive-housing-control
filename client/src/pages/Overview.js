@@ -17,11 +17,15 @@ const getAvailableMonths = sensorData => {
 }
 
 const Overview = () => {
-  const { data, isLoading, isError } = useAxios('/api/mariaDB/allMeasurements')
+  const { data, isLoading, isError } = useAxios(
+    '/api/mariaDB/averageMeasurementsPerDay',
+    {},
+    [],
+  )
 
   if (isLoading) return <LoadingAnimation />
   if (isError) return <h2>Ein Fehler ist aufgetreten!</h2>
-  const availableMonths = getAvailableMonths(data || [])
+  const availableMonths = getAvailableMonths(data)
 
   return (
     <Container>
