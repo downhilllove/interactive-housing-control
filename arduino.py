@@ -58,8 +58,8 @@ try:
         line = arduino.readline()
 
         # Check if current line matches regexes
-        humidityMatch = matchHumidityRegex(data)
-        temperatureMatch = matchTemperatureRegex(data)
+        humidityMatch = matchHumidityRegex(line)
+        temperatureMatch = matchTemperatureRegex(line)
 
         if humidityMatch:
             measurement["temperatureCelsius"] = float(humidityMatch.group(1))
