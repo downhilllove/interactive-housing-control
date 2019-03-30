@@ -9,16 +9,16 @@ import useAxios from '../hooks/useAxios'
 import styles from './Home.module.scss'
 
 const numberOfLatestMeasurementsToDisplay = 10
-const getLatest10Measurements = (measurements = []) =>
-  [...measurements].reverse().splice(0, numberOfLatestMeasurementsToDisplay)
 
 const Home = () => {
-  const { data, isLoading, isError } = useAxios('/api/mariaDB/allMeasurements')
+  const { data, isLoading, isError } = useAxios(
+    '/api/mariaDB/latestMeasurements',
+    {},
+    [],
+  )
 
   if (isLoading) return <LoadingAnimation />
   if (isError) return <h2>Ein Fehler ist aufgetreten!</h2>
-
-  const latest10SensorDataMeasurements = getLatest10Measurements(data || [])
 
   return (
     <Container>
@@ -27,7 +27,7 @@ const Home = () => {
         <br />
         <SensorDataTable
           title={`Letzte ${numberOfLatestMeasurementsToDisplay} Messungen`}
-          sensorData={latest10SensorDataMeasurements}
+          sensorData={data}
         />
       </div>
     </Container>
