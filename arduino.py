@@ -24,11 +24,11 @@ def getInsertQuery(temperatureCelsius, humidityPercentage):
 
 
 def matchHumidityRegex(line):
-    return re.match("b'Luftfeuchtigkeit:\s(\d+\.\d+)\s%\\r\\n'", line)
+    return re.match("Luftfeuchtigkeit:\s(\d+\.\d+)\s%", line)
 
 
 def matchTemperatureRegex(line):
-    return re.match("b'Temperatur:\s(\d+.\d+)\sGrad\sCelsius\\r\\n'", line)
+    return re.match("Temperatur:\s(\d+.\d+)\sGrad\sCelsius", line)
 
 
 # Connect to database
@@ -56,10 +56,11 @@ foundTemperature = False
 try:
     while True:
         line = arduino.readline()
+        decodedLine = line.encode(encoding="UTF-8")
 
         # Check if current line matches regexes
-        humidityMatch = matchHumidityRegex(line)
-        temperatureMatch = matchTemperatureRegex(line)
+        humidityMatch = matchHumidityRegex(decodedLine)
+        temperatureMatch = matchTemperatureRegex(decodedLine)
 
         if humidityMatch:
             measurement["temperatureCelsius"] = float(humidityMatch.group(1))
