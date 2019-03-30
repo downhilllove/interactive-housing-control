@@ -13,6 +13,9 @@ DB_USER = os.getenv("DB_USER")
 DB_PASSWORD = os.getenv("DB_PASSWORD")
 DB_DATABASE = os.getenv("DB_DATABASE")
 
+# Set Arduino port
+PORT = "/dev/ttyUSB1"
+
 # Helper functions
 def getCurrentDateString():
     return datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -39,7 +42,7 @@ cursor = db.cursor()
 print("MariaDB connection successfully established")
 
 # Connect to Arduino
-arduino = serial.Serial("/dev/ttyUSB1", 9600)
+arduino = serial.Serial(PORT, 9600)
 if arduino.isOpen():
     print("Arduino connection successfully established")
 
@@ -56,7 +59,7 @@ foundTemperature = False
 try:
     while True:
         line = arduino.readline()
-        decodedLine = line.encode(encoding="UTF-8")
+        decodedLine = line.decode(encoding="UTF-8")
 
         # Check if current line matches regexes
         humidityMatch = matchHumidityRegex(decodedLine)
@@ -72,15 +75,20 @@ try:
 
         if foundHumidity and foundTemperature:
             print(
-                "New measurement: Temperature:",
+                "Temperature:",
                 measurement["temperatureCelsius"],
+                "° Celsius",
                 "Humidity:",
                 measurement["humidityPercentage"],
+                "%",
             )
+            cursor.execute(
+                getInsertQuery(
+                    measurement["temperatureCelsius"], measurement["humidityPercentage"]
+                )
+            )
+            db.commit()
             foundHumidity = False
             foundTemperature = False
-
-        # cursor.execute(getInsertQuery(measurement['temperatureCelsius'], measurement['humidityPercentage']))
-        # db.commit()
 except KeyboardInterrupt:
     arduino.close()
