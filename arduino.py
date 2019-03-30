@@ -47,10 +47,7 @@ if arduino.isOpen():
 time.sleep(5)
 
 # Dictionary for database inserts
-measurement = {
-    'temperatureCelsius': 0,
-    'humidityPercentage': 0
-}
+measurement = {"temperatureCelsius": 0, "humidityPercentage": 0}
 
 # Looping variables
 foundHumidity = False
@@ -64,16 +61,21 @@ try:
         humidityMatch = matchHumidityRegex(data)
         temperatureMatch = matchTemperatureRegex(data)
 
-        if(humidityMatch):
-            measurement['temperatureCelsius'] = float(humidityMatch.group(1))
+        if humidityMatch:
+            measurement["temperatureCelsius"] = float(humidityMatch.group(1))
             foundHumidity = True
 
-        if(temperatureMatch)
-            measurement['humidityPercentage'] = float(temperatureMatch.group(1))
+        if temperatureMatch:
+            measurement["humidityPercentage"] = float(temperatureMatch.group(1))
             foundTemperature = True
 
-        if(foundHumidity and foundTemperature):
-            print('New measurement: Temperature:', measurement['temperatureCelsius'], "Humidity:", measurement['humidityPercentage'])
+        if foundHumidity and foundTemperature:
+            print(
+                "New measurement: Temperature:",
+                measurement["temperatureCelsius"],
+                "Humidity:",
+                measurement["humidityPercentage"],
+            )
             foundHumidity = False
             foundTemperature = False
 
