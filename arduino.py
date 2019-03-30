@@ -1,5 +1,6 @@
 import os
 import time
+import re
 from datetime import datetime
 import mysql.connector
 import serial
@@ -22,6 +23,14 @@ def getInsertQuery(temperatureCelsius, humidityPercentage):
     return query % (getCurrentDateString(), temperatureCelsius, humidityPercentage)
 
 
+def matchHumidityRegex(line):
+    return re.match("b'Luftfeuchtigkeit:\s(\d+\.\d+)\s%\\r\\n'", line)
+
+
+def matchTemperatureRegex(line):
+    return re.match("b'Temperatur:\s(\d+.\d+)\sGrad\sCelsius\\r\\n'", line)
+
+
 # Connect to database
 db = mysql.connector.connect(
     host=DB_HOST, user=DB_USER, password=DB_PASSWORD, database=DB_DATABASE
@@ -34,15 +43,41 @@ arduino = serial.Serial("/dev/ttyUSB1", 9600)
 if arduino.isOpen():
     print("Arduino connection successfully established")
 
+# Wait 5 seconds
 time.sleep(5)
+
+# Dictionary for database inserts
+measurement = {
+    'temperatureCelsius': 0,
+    'humidityPercentage': 0
+}
+
+# Looping variables
+foundHumidity = False
+foundTemperature = False
 
 try:
     while True:
-        arduinoData = arduino.readline()
-        temperatureCelsius = 10
-        humidityPercentage = 20
-        cursor.execute(getInsertQuery(temperatureCelsius, humidityPercentage))
-        db.commit()
-        print("Inserted ")
+        line = arduino.readline()
+
+        # Check if current line matches regexes
+        humidityMatch = matchHumidityRegex(data)
+        temperatureMatch = matchTemperatureRegex(data)
+
+        if(humidityMatch):
+            measurement['temperatureCelsius'] = float(humidityMatch.group(1))
+            foundHumidity = True
+
+        if(temperatureMatch)
+            measurement['humidityPercentage'] = float(temperatureMatch.group(1))
+            foundTemperature = True
+
+        if(foundHumidity and foundTemperature):
+            print('New measurement: Temperature:', measurement['temperatureCelsius'], "Humidity:", measurement['humidityPercentage'])
+            foundHumidity = False
+            foundTemperature = False
+
+        # cursor.execute(getInsertQuery(measurement['temperatureCelsius'], measurement['humidityPercentage']))
+        # db.commit()
 except KeyboardInterrupt:
     arduino.close()
