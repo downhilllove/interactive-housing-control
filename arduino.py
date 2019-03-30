@@ -22,7 +22,7 @@ def getCurrentDateString():
 
 
 def getInsertQuery(temperatureCelsius, humidityPercentage):
-    query = "INSERT INTO Measurements (date, temperatureCelsius, humidityPercentage) VALUES (%s, %s, %s)"
+    query = "INSERT INTO Measurements (date, temperatureCelsius, humidityPercentage) VALUES ('%s', %s, %s)"
     return query % (getCurrentDateString(), temperatureCelsius, humidityPercentage)
 
 
@@ -82,12 +82,15 @@ try:
                 measurement["humidityPercentage"],
                 "%",
             )
-            cursor.execute(
-                getInsertQuery(
-                    measurement["temperatureCelsius"], measurement["humidityPercentage"]
-                )
+
+            # Write to db
+            query = getInsertQuery(
+                measurement["temperatureCelsius"], measurement["humidityPercentage"]
             )
+            cursor.execute(query)
             db.commit()
+
+            # Reset looping variables
             foundHumidity = False
             foundTemperature = False
 except KeyboardInterrupt:
