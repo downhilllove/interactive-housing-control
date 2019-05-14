@@ -14,14 +14,19 @@ const formatDateTimeForMariaDB = date =>
 // @desc    Get all measurements
 // @access  Public
 router.get('/allMeasurements', async (req, res) => {
+  let dbConnection = null
+
   try {
-    const dbConnection = await getMariaDBConnection()
+    dbConnection = await getMariaDBConnection()
+
     await dbConnection.query(`USE ${database};`)
     const measurements = await dbConnection.query(`SELECT * FROM ${tableName};`)
     res.json(measurements)
   } catch (error) {
     console.error(error)
     res.status(500).json({ error })
+  } finally {
+    if (dbConnection) dbConnection.end()
   }
 })
 // @route   GET api/mariaDB/latestMeasurements
@@ -29,6 +34,7 @@ router.get('/allMeasurements', async (req, res) => {
 // @access  Public
 router.get('/latestMeasurements', async (req, res) => {
   const numberOfMeasurements = req.query.count || 10
+  let dbConnection = null
 
   const query = `
   SELECT *
@@ -38,13 +44,16 @@ router.get('/latestMeasurements', async (req, res) => {
   `
 
   try {
-    const dbConnection = await getMariaDBConnection()
+    dbConnection = await getMariaDBConnection()
+
     await dbConnection.query(`USE ${database};`)
     const measurements = await dbConnection.query(query)
     res.json(measurements)
   } catch (error) {
     console.error(error)
     res.status(500).json({ error })
+  } finally {
+    if (dbConnection) dbConnection.end()
   }
 })
 
@@ -52,6 +61,8 @@ router.get('/latestMeasurements', async (req, res) => {
 // @desc    Get average measurements grouped by day
 // @access  Public
 router.get('/averageMeasurementsPerDay', async (req, res) => {
+  let dbConnection = null
+
   const query = `
   SELECT
     id,
@@ -63,20 +74,25 @@ router.get('/averageMeasurementsPerDay', async (req, res) => {
   `
 
   try {
-    const dbConnection = await getMariaDBConnection()
+    dbConnection = await getMariaDBConnection()
+
     await dbConnection.query(`USE ${database};`)
     const measurements = await dbConnection.query(query)
     res.json(measurements)
   } catch (error) {
     console.error(error)
     res.status(500).json({ error })
+  } finally {
+    if (dbConnection) dbConnection.end()
   }
 })
 
-// @route   GET api/mariaDB/resetDB
+// @route   DELETE api/mariaDB/resetDB
 // @desc    Drop and recreate db and Measurements table
 // @access  Public
 router.delete('/resetDB', async (req, res) => {
+  let dbConnection = null
+
   const createTableQuery = `
   CREATE TABLE ${tableName} (
     id INT PRIMARY KEY AUTO_INCREMENT,
@@ -87,7 +103,8 @@ router.delete('/resetDB', async (req, res) => {
 `
 
   try {
-    const dbConnection = await getMariaDBConnection()
+    dbConnection = await getMariaDBConnection()
+
     await dbConnection.query(`CREATE OR REPLACE DATABASE ${database};`) // Reset the database
     console.info(`Dropped and created database ${database}`)
     await dbConnection.query(`USE ${database};`)
@@ -99,13 +116,16 @@ router.delete('/resetDB', async (req, res) => {
   } catch (error) {
     console.error(error)
     res.status(500).json({ error })
+  } finally {
+    if (dbConnection) dbConnection.end()
   }
 })
 
-// @route   GET api/mariaDB/fillWithFakeMeasurements
+// @route   PUT api/mariaDB/fillWithFakeMeasurements
 // @desc    Fill database with fake measurements
 // @access  Public
 router.put('/fillWithFakeMeasurements', async (req, res) => {
+  let dbConnection = null
   const fakeMeasurements = createFakeMeasurements()
 
   const batchQuery = {
@@ -120,7 +140,8 @@ router.put('/fillWithFakeMeasurements', async (req, res) => {
   }
 
   try {
-    const dbConnection = await getMariaDBConnection()
+    dbConnection = await getMariaDBConnection()
+
     await dbConnection.query(`USE ${database};`)
     console.info(`Selected database ${database}`)
     const result = await dbConnection.batch(batchQuery.sql, batchQuery.values)
@@ -132,6 +153,8 @@ router.put('/fillWithFakeMeasurements', async (req, res) => {
   } catch (error) {
     console.error(error)
     res.status(500).json({ error })
+  } finally {
+    if (dbConnection) dbConnection.end()
   }
 })
 

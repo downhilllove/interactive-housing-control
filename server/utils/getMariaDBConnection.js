@@ -11,7 +11,7 @@ const dbConnectionPool = mariadb.createPool({
   port,
   user,
   password,
-  connectionLimit: 5,
+  connectionLimit: 10,
 })
 
 const getMariaDBConnection = async () => {
