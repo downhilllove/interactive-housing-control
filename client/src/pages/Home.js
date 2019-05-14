@@ -8,12 +8,12 @@ import useAxios from '../hooks/useAxios' //daten werden von dem Server geholt
 
 import styles from './Home.module.scss' // Klassen mit CSS Styles
 
-const numberOfLatestMeasurementsToDisplay = 10 // Variable für die anzuzeigenden Messungen
+const numberOfMeasurementsToDisplay = 10 // Variable für die anzuzeigenden Messungen
 
 const Home = () => {
   //reactcomponent für die Homepage
   const { data, isLoading, isError } = useAxios(
-    `/api/mariaDB/latestMeasurements?count=${numberOfLatestMeasurementsToDisplay}`,
+    `/api/mariaDB/latestMeasurements?count=${numberOfMeasurementsToDisplay}`,
   )
 
   if (isLoading) return <LoadingAnimation /> // Wenn es ladet dann zeigt es die Ladeanimation
@@ -26,7 +26,7 @@ const Home = () => {
         <h1>Home</h1>
         <br />
         <SensorDataTable
-          title={`Letzte ${numberOfLatestMeasurementsToDisplay} Messungen`}
+          title={`Letzte ${numberOfMeasurementsToDisplay} Messungen`}
           sensorData={data || []}
         />
       </div>
