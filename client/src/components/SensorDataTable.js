@@ -26,7 +26,7 @@ const SensorDataTable = ({
             ({ id, date, temperatureCelsius, humidityPercentage }) => {
               const formattedDate = moment(date).format(dateFormatter)
               return (
-                <tr key={id}>
+                <tr key={id || formattedDate}>
                   <td>{formattedDate}</td>
                   <td>
                     {formatNumberWithMaxFractionDigits(temperatureCelsius, 2)}{' '}
