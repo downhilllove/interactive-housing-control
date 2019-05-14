@@ -66,11 +66,11 @@ try:
         temperatureMatch = matchTemperatureRegex(decodedLine)
 
         if humidityMatch:
-            measurement["temperatureCelsius"] = float(humidityMatch.group(1))
+            measurement["humidityPercentage"] = float(humidityMatch.group(1))
             foundHumidity = True
 
         if temperatureMatch:
-            measurement["humidityPercentage"] = float(temperatureMatch.group(1))
+            measurement["temperatureCelsius"] = float(temperatureMatch.group(1))
             foundTemperature = True
 
         if foundHumidity and foundTemperature:
