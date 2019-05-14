@@ -76,7 +76,7 @@ router.get('/averageMeasurementsPerDay', async (req, res) => {
 // @route   GET api/mariaDB/resetDB
 // @desc    Drop and recreate db and Measurements table
 // @access  Public
-router.get('/resetDB', async (req, res) => {
+router.delete('/resetDB', async (req, res) => {
   const createTableQuery = `
   CREATE TABLE ${tableName} (
     id INT PRIMARY KEY AUTO_INCREMENT,
@@ -105,7 +105,7 @@ router.get('/resetDB', async (req, res) => {
 // @route   GET api/mariaDB/fillWithFakeMeasurements
 // @desc    Fill database with fake measurements
 // @access  Public
-router.get('/fillWithFakeMeasurements', async (req, res) => {
+router.put('/fillWithFakeMeasurements', async (req, res) => {
   const fakeMeasurements = createFakeMeasurements()
 
   const batchQuery = {

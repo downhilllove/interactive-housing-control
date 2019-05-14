@@ -1,19 +1,19 @@
 import React from 'react'
-import { Container } from 'reactstrap'
+import { Container, Button } from 'reactstrap'
 
-import Button from './Button'
-
-import createFakeSensorMeasurements from '../apis/createFakeSensorMeasurements'
-import deleteAllMeasurements from '../apis/deleteAllMeasurements'
+import fillDBWithFakeMeasurements from '../apis/fillDBWithFakeMeasurements'
+import resetDB from '../apis/resetDB'
 
 const Footer = () => {
   return (
-    <footer>
+    <footer style={{ padding: '2rem 0' }}>
       <Container>
-        <Button onClick={createFakeSensorMeasurements}>
+        <Button onClick={fillDBWithFakeMeasurements}>
           Datenbank mit randomisierten Daten füllen
         </Button>
-        <Button onClick={deleteAllMeasurements}>Datenbank löschen</Button>
+        <br />
+        <br />
+        <Button onClick={resetDB}>Datenbank zurücksetzen</Button>
       </Container>
     </footer>
   )
