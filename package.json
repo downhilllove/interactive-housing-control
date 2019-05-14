@@ -4,7 +4,7 @@
   "description": "School project for HTL Anichstraße",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
+    "start": "NODE_ENV=production node server.js",
     "dev": "SKIP_PREFLIGHT_CHECK=true concurrently \"npm run server\" \"npm run client\"",
     "server": "nodemon server.js",
     "client": "npm start --prefix client",
